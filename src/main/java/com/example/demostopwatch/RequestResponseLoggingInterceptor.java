@@ -32,9 +32,10 @@ public class RequestResponseLoggingInterceptor implements ClientHttpRequestInter
         //Add optional additional headers
         response.getHeaders().add("stopwatch", String.valueOf(stopWatch.getTotalTimeMillis()));
         response.getHeaders().add("memory", String.valueOf(responseBody.length));
+        response.getHeaders().add("status code", String.valueOf(response.getRawStatusCode()));
 
         logResponse(response);
-        log.info(stopWatch.prettyPrint());
+        //log.info(stopWatch.prettyPrint());
 
         return response;
     }

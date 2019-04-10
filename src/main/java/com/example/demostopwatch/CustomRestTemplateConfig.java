@@ -17,13 +17,13 @@ import java.util.Collections;
 public class CustomRestTemplateConfig {
 
     // Determines the timeout in milliseconds until a connection is established.
-    private static final int CONNECT_TIMEOUT = 30000;
+    private static final int CONNECT_TIMEOUT = 1000;
 
     // The timeout when requesting a connection from the connection manager.
-    private static final int REQUEST_TIMEOUT = 30000;
+    private static final int REQUEST_TIMEOUT = 100;
 
     // The timeout for waiting for data
-    private static final int SOCKET_TIMEOUT = 60000;
+    private static final int SOCKET_TIMEOUT = 1000;
 
     private static final int MAX_TOTAL_CONNECTIONS = 50;
     private static final int DEFAULT_KEEP_ALIVE_TIME_MILLIS = 20 * 1000;
@@ -38,6 +38,8 @@ public class CustomRestTemplateConfig {
         restTemplate.setMessageConverters(Collections.singletonList(mappingJacksonHttpMessageConverter()));
 
         restTemplate.setInterceptors( Collections.singletonList(new RequestResponseLoggingInterceptor()) );
+
+        restTemplate.setRequestFactory(clientHttpRequestFactory());
 
         return restTemplate;
     }
@@ -65,6 +67,9 @@ public class CustomRestTemplateConfig {
         HttpComponentsClientHttpRequestFactory clientHttpRequestFactory = new HttpComponentsClientHttpRequestFactory();
 
         clientHttpRequestFactory.setHttpClient(httpClient());
+        clientHttpRequestFactory.setConnectTimeout(CONNECT_TIMEOUT);
+        clientHttpRequestFactory.setReadTimeout(REQUEST_TIMEOUT);
+        clientHttpRequestFactory.setConnectionRequestTimeout(SOCKET_TIMEOUT);
         return clientHttpRequestFactory;
     }
 
