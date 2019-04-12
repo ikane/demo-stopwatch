@@ -27,7 +27,8 @@ public class RequestResponseLoggingInterceptor implements ClientHttpRequestInter
 
 
         //long length = response.getHeaders().getContentLength();
-        byte[] responseBody = FileCopyUtils.copyToByteArray(response.getBody());
+        //byte[] responseBody = FileCopyUtils.copyToByteArray(response.getBody());
+        byte[] responseBody = new byte[]{};
 
         //Add optional additional headers
         response.getHeaders().add("stopwatch", String.valueOf(stopWatch.getTotalTimeMillis()));
@@ -48,6 +49,7 @@ public class RequestResponseLoggingInterceptor implements ClientHttpRequestInter
             log.info("Method      : {}", request.getMethod());
             log.info("Headers     : {}", request.getHeaders());
             log.info("Request body: {}", new String(body, "UTF-8"));
+            log.info("Param1: {}", request.getHeaders().get("param1"));
             log.info("==========================request end================================================");
 
     }
