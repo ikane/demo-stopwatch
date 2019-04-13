@@ -6,6 +6,7 @@ import org.apache.http.impl.client.HttpClients;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.client.BufferingClientHttpRequestFactory;
+import org.springframework.http.client.ClientHttpRequestFactory;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
@@ -63,14 +64,17 @@ public class CustomRestTemplateConfig {
     }
 
     @Bean
-    public HttpComponentsClientHttpRequestFactory clientHttpRequestFactory() {
+    public ClientHttpRequestFactory clientHttpRequestFactory() {
         HttpComponentsClientHttpRequestFactory clientHttpRequestFactory = new HttpComponentsClientHttpRequestFactory();
 
         clientHttpRequestFactory.setHttpClient(httpClient());
         clientHttpRequestFactory.setConnectTimeout(CONNECT_TIMEOUT);
         clientHttpRequestFactory.setReadTimeout(REQUEST_TIMEOUT);
         clientHttpRequestFactory.setConnectionRequestTimeout(SOCKET_TIMEOUT);
-        return clientHttpRequestFactory;
+
+        return new BufferingClientHttpRequestFactory(clientHttpRequestFactory);
+
+        //return clientHttpRequestFactory;
     }
 
 

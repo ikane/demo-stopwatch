@@ -25,10 +25,14 @@ public class RequestResponseLoggingInterceptor implements ClientHttpRequestInter
         ClientHttpResponse response = execution.execute(request, body);
         stopWatch.stop();
 
-
-        //long length = response.getHeaders().getContentLength();
-        //byte[] responseBody = FileCopyUtils.copyToByteArray(response.getBody());
-        byte[] responseBody = new byte[]{};
+        long length = response.getHeaders().getContentLength();
+        byte[] responseBody;
+        try {
+            responseBody = FileCopyUtils.copyToByteArray(response.getBody());
+        } catch (IOException e) {
+            e.printStackTrace();
+            responseBody = new byte[]{};
+        }
 
         //Add optional additional headers
         response.getHeaders().add("stopwatch", String.valueOf(stopWatch.getTotalTimeMillis()));
